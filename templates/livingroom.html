@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>辛普森客廳</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0e68c;
+        }
+        #livingroom-container {
+            width: 100vw;
+            height: 100vh;
+            background-image: url('{{ url_for("static", filename="images/livingroom.jpg") }}');
+            background-size: cover;
+            background-position: center;
+        }
+        .character ,.item{
+            position: absolute;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+        }
+
+        .character:hover::after {
+            content: attr(data-dialog);
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .scene-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #581c8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+            top:25px;  /* 可根據需要調整位置 */
+            left: 50px;
+            transform: translateX(-50%);
+            transition: background-color 0.3s ease;
+        }
+
+        .scene-button:hover {
+            background-color: #331054;
+        }
+       
+    </style>
+</head>
+<body>
+    <div id="livingroom-container">
+        <div id="homer" class="character" style="top: 100px; left: 250px;" 
+             data-dialog="什麼時候才有廣告啊？我要拿啤酒！" onclick="goToCharacter('homer')">Homer</div>
+        <div id="marge" class="character" style="top: 100px; left: 400px;" 
+             data-dialog="Homer，別再吃掉沙發上的零食屑了！" onclick="goToCharacter('marge')">Marge</div>
+        <div id="bart" class="character" style="top: 200px; left: 660px;" 
+             data-dialog="嘿，Lisa，看來這場無聊的家庭劇又要開演了！" onclick="goToCharacter('bart')">Bart</div>
+        <div id="lisa" class="character" style="top: 420px; left: 525px;" 
+             data-dialog="拜託，Bart，至少這次能不能安靜點看完？" onclick="goToCharacter('lisa')">Lisa</div>
+        <div id="maggie" class="character" style="top: 380px; left: 555px;" 
+             data-dialog="（安靜地咬著奶嘴，發出「啵啵啵」的聲音）" onclick="goToCharacter('maggie')">Maggie</div>
+
+        <div id="phone" class="item" style="top: 220px; left: 220px;" >???</div>
+        <div id="tv" class="item" style="top: 420px; left: 800px;" >電視在播什麼呢？</div>
+
+
+    </div>
+
+    <!-- 按鈕：點擊進入廚房 -->
+    <a href="{{ url_for('kitchen') }}">
+        <button class="scene-button">廚房</button>
+    </a>
+
+    <!-- 鈴聲音頻 -->
+    <audio id="phone-sound">
+        <source src="{{ url_for('static', filename='audio/ringtone.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function goToCharacter(name) {
+            window.location.href = "/character/" + name;
+        }
+
+        // 獲取文字和音頻元素
+        const phoneText = document.getElementById('phone');
+        const phoneSound = document.getElementById('phone-sound');
+
+        // 點擊電話時處理播放/暫停
+        phoneText.addEventListener('click', () => {
+            if (!phoneSound.paused) {
+                phoneSound.pause();  // 如果正在播放，暫停
+                phoneSound.currentTime = 0; // 重置播放時間
+            } else {
+                phoneSound.play();   // 如果未播放，開始播放
+            }
+        });
+
+    //電視
+    document.addEventListener('DOMContentLoaded', () => {
+        const tvText = document.getElementById('tv');
+        let videoElement;
+    
+        tvText.addEventListener('click', () => {
+            // 創建全螢幕影片元素
+            videoElement = document.createElement('video');
+            videoElement.src = "{{ url_for('static', filename='videos/rose.mp4') }}";
+            videoElement.autoplay = true;
+            videoElement.controls = true;
+            videoElement.style.position = 'fixed';
+            videoElement.style.top = '0';
+            videoElement.style.left = '0';
+            videoElement.style.width = '100vw';
+            videoElement.style.height = '100vh';
+            videoElement.style.zIndex = '1000';
+            videoElement.style.backgroundColor = '#000';
+    
+            document.body.appendChild(videoElement);
+    
+            // 點擊影片外部或播放完畢後退出
+            const closeVideo = () => {
+                videoElement.remove();
+                videoElement = null;
+            };
+    
+            videoElement.addEventListener('ended', closeVideo);
+            videoElement.addEventListener('click', (e) => {
+                if (e.target === videoElement) {
+                    closeVideo();
+                }
+            });
+        });
+    });
+    
+    
+    </script>
+
+
+</body>
+</html>

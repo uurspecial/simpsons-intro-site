@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ character.name }}</title>
+    <style>
+        body {
+            background-color: #f0e68c;
+            font-family: Arial, sans-serif;
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .character-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .character-container img {
+            width: 300px;
+            height: auto;
+        }
+        .description {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;    /* 文字左對齊 */
+            line-height: 1.5;    /* 行距 */
+            padding: 10px;
+            max-width: 600px;    /* 限制寬度以提升閱讀體驗 */
+            margin: 0 auto;      /* 居中顯示 */
+        }
+        .return-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000; /* 保證在最上層 */
+        }
+        .return-button img {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            opacity: 0.7; /* 半透明效果 */
+            transition: opacity 0.3s ease;
+        }
+        .return-button img:hover {
+            opacity: 1; /* 滑過時全透明 */
+        }
+    </style>
+</head>
+<body>
+    <div class="character-container">
+        <h1>{{ character.name }}</h1>
+        <img src="{{ url_for('static', filename=character.image) }}" alt="{{ character.name }}">
+        <div class="description">
+            {{ character.description|safe }}
+        </div>
+    </div>
+
+    <a href="{{ url_for('livingroom') }}" class="return-button">
+        <img src="{{ url_for('static', filename='images/home.jpeg') }}" alt="返回客廳">
+    </a>
+</body>
+</html>
