@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>辛普森角色博物館</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- 直接填寫檔案的相對路徑 -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="player-container">
-        <!-- GIF 圖片，點擊後會觸發跳轉 -->
-        <img src="{{ url_for('static', filename='images/intro.gif') }}" alt="播放器圖片" id="player-image">
+        <!-- 移除 {{ url_for... }}，直接指向 images 資料夾內的圖片 -->
+        <img src="images/intro.gif" alt="播放器圖片" id="player-image">
     </div>
 
-    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+    <!-- 直接指向 scripts 資料夾內的 JS 檔案 -->
+    <script src="scripts/script.js"></script>
 </body>
 </html>
